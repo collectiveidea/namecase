@@ -13,17 +13,23 @@ module CollectiveIdea #:nodoc:
           save_methods = { :create => :before_create, :save => :before_save }
         
           # Declare the callback.
-          # send(save_methods[options[:on] || :create]) do |record|
-          before_save do |record|
+          send(save_methods[options[:on] || :create]) do |record|
             attrs.each do |attr_name|
-              # only titleize Strings that end with a cap or don't contain any caps (a hack, I know)
-              if record[attr_name].is_a?(String) && (record[attr_name].last =~ /[A-Z]/ || (record[attr_name] =~ /[A-Z]/).nil?)
-                record[attr_name] = record[attr_name].titleize
+              # only titleize Strings that don't contain any lower case letters or
+              # don't contain any caps (a hack, I know)
+              if record[attr_name].is_a?(String) && ((record[attr_name] =~ /[a-z]/).nil? || (record[attr_name] =~ /[A-Z]/).nil?)
+                record[attr_name] = record[attr_name].namecase
               end
             end
           end
         end
       end
     end
+  end
+end
+
+class String
+  def namecase
+    downcase.gsub(/\b([a-z])/) { $1.capitalize }
   end
 end

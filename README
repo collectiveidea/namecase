@@ -4,7 +4,7 @@ Namecase
 This is a trivial plugin that tries to fix the case of a string if it is given a string that is all caps or all lower case
 
   class Person < ActiveRecord::Base
-    namecase :first_name
+    namecase :first_name, :on => :create
   end
   
   >> Person.create(:first_name => 'larry').first_name
