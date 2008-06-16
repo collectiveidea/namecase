@@ -32,4 +32,8 @@ class String
   def namecase
     downcase.gsub(/\b([a-z])/) { $1.capitalize }
   end
+  
+  def namecase!
+    replace namecase
+  end
 end
